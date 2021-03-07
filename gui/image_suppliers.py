@@ -21,11 +21,25 @@ class WebcamSupplier:
         # reference to singleton camera
         self.webcam = WebcamSupplier.CAMERA_INSTANCE
 
-    def getImage(self):
+    def getImageArray(self):
         ret, frame = self.webcam.read()
 
         frame = cv2.resize(frame, (self.width, self.height), interpolation=cv2.INTER_LANCZOS4)
+        return frame
+
+    def getImage(self):
+        frame = self.getImageArray()
+
         return QImage(frame, self.width, self.height, QImage.Format_BGR888)
+
+class FlippedWebcamSupplier(WebcamSupplier):
+
+    def __init__(self, width, height, direction=0):
+        super().__init__(width, height)
+        self.direction = direction
+
+    def getImageArray(self):
+        return cv2.flip(super().getImageArray(), self.direction)
 
 class ImageSupplier:
 

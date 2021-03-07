@@ -61,6 +61,11 @@ class TabManager(QWidget):
         self.tabs.removeTab(idx)
         self._updateIndices()
 
+    def _pauseTabs(self):
+        for i in range(self.tabs.count()):
+            tab = self.tabs.widget(i)
+            tab.setStreaming(False)
+
     def _closeTab(self, idx):
         tab = self.tabs.widget(idx) 
         tab.close()

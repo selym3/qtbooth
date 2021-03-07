@@ -2,6 +2,8 @@ import sys
 
 from PyQt5.QtWidgets import QMainWindow
 
+from PyQt5.QtCore import Qt
+
 from .tab_manager import TabManager
 
 class Window(QMainWindow):
@@ -15,6 +17,16 @@ class Window(QMainWindow):
         # setup window
         self.setWindowTitle("qtbooth")
         self.setCentralWidget(self.tabManager)
+
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key_Escape:
+            self.close()
+        elif event.key() == Qt.Key_Space:
+            self._toggleActiveTab()
+
+    def _toggleActiveTab(self):
+        # TODO: add better gettets
+        self.tabManager.tabs.currentWidget()._toggleImageStream()
 
     def closeEvent(self, *args, **kwargs):
         self.tabManager.closeTabs()
