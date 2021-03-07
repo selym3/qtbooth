@@ -85,8 +85,10 @@ class Tab(QScrollArea):
         self.imageRunner = None
 
     def _toggleImageStream(self):
+        pausedState = self.isStreaming()
+  
         self.tabManager._pauseTabs()
-        self.imageRunner.paused = not self.imageRunner.paused
+        self.imageRunner.paused = pausedState
 
     def updateName(self):
         # print(self.index)
