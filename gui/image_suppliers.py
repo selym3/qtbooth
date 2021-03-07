@@ -41,6 +41,16 @@ class FlippedWebcamSupplier(WebcamSupplier):
     def getImageArray(self):
         return cv2.flip(super().getImageArray(), self.direction)
 
+class BlurredWebcamSupplier(WebcamSupplier):
+    
+    def __init__(self, width, height, amount=(5, 5)):
+        super().__init__(width, height)
+        self.amount = amount
+
+    def getImageArray(self):
+        return cv2.blur(super().getImageArray(), self.amount)
+
+
 class ImageSupplier:
 
     def __init__(self, pathToImage):

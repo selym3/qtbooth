@@ -1,7 +1,7 @@
 
 from PyQt5.QtWidgets import QWidget, QScrollArea, QGroupBox, QPushButton, QFormLayout, QLineEdit
 from .image_display import ImageDisplay, DisplayThread
-from .image_suppliers import ColorSupplier, RainbowSupplier, ImageSupplier, WebcamSupplier, FlippedWebcamSupplier
+from .image_suppliers import ColorSupplier, RainbowSupplier, ImageSupplier, WebcamSupplier, FlippedWebcamSupplier,BlurredWebcamSupplier
 
 class Tab(QScrollArea):
 
@@ -15,6 +15,15 @@ class Tab(QScrollArea):
                 supplier = FlippedWebcamSupplier(320, 240, int(direction))
             except Exception as e:
                 pass
+        elif name == 'blur':
+            supplier = BlurredWebcamSupplier(320, 240)
+        elif name.startswith('blur-'):
+            try:
+                amount = name[len('blur-'):]
+                amount = int(amount)
+                supplier = BlurredWebcamSupplier(320, 240,(amount, amount))
+            except Exception as e:
+                supplier = BlurredWebcamSupplier(320, 240)
         else:
             pass
 
