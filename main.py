@@ -12,8 +12,8 @@ if __name__ == "__main__":
 
     window = Window()
     
-    width, height = 640, 480
-    window.setFixedSize(width, height)
+    # width, height = 640, 480
+    # window.setMinimumSize(width, height)
     
     window.show()
 

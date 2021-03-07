@@ -15,3 +15,7 @@ class Window(QMainWindow):
         # setup window
         self.setWindowTitle("qtbooth")
         self.setCentralWidget(self.tabManager)
+
+    def closeEvent(self, *args, **kwargs):
+        self.tabManager.closeTabs()
+        print("Closing")

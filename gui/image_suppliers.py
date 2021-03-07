@@ -30,9 +30,20 @@ class WebcamSupplier:
 class ImageSupplier:
 
     def __init__(self, pathToImage):
-        self.image = Image.open(pathToImage)
+        self.image = Image.open(pathToImage).convert('RGBA')
         self.buffer = np.array(self.image)
         self.height, self.width, self.channels = self.buffer.shape 
+
+        # try:
+        #     self.image = Image.open(pathToImage)
+        #     self.buffer = np.array(self.image)
+        #     self.height, self.width, self.channels = self.buffer.shape 
+        # except Exception as e:
+        #     # This is really dumb , but if it doesnt have a channel, it 
+        #     # is probably a png with an -A channel that needs to be reloaded
+        #     self.image = self.image.convert('RGBA')
+        #     self.buffer = np.array(self.image)
+        #     self.height, self.width, self.channels = self.buffer.shape 
 
         self.qImage = None
 

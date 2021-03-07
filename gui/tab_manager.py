@@ -27,6 +27,7 @@ class TabManager(QWidget):
         self.tabs.tabBar().tabCloseRequested.connect(self._removeTab)
 
         self.tabs.tabBar().setMovable(True)
+        self.tabs.tabBar().tabMoved.connect(self._updateIndices)
 
         self.tabs.setCornerWidget(self.cornerButton)
         self.cornerButton.clicked.connect(self._addNewTab)
@@ -53,11 +54,17 @@ class TabManager(QWidget):
         return self.tabs.count() > 0
 
     def _removeTab(self, idx=0):
-        # this accouns for the last tab being protected (which it should be)
-        if idx < 0 or idx >= self.tabs.count():
+        if idx < 0 or idx >= self.tabs.count() or self.tabs.count() <= 1:
             return 
-        if self.tabs.count() == 1:
-            return
         
+        self._closeTab(idx)
         self.tabs.removeTab(idx)
         self._updateIndices()
+
+    def _closeTab(self, idx):
+        tab = self.tabs.widget(idx) 
+        tab.close()
+
+    def closeTabs(self):
+        for i in range(self.tabs.count()):
+            self._closeTab(i)

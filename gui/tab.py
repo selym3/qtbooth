@@ -1,6 +1,6 @@
 
 from PyQt5.QtWidgets import QWidget, QScrollArea, QGroupBox, QPushButton, QFormLayout, QLineEdit
-from .image_display import ImageDisplay
+from .image_display import ImageDisplay, DisplayThread
 from .image_suppliers import ColorSupplier, RainbowSupplier, ImageSupplier, WebcamSupplier
 
 class Tab(QScrollArea):
@@ -20,15 +20,24 @@ class Tab(QScrollArea):
         self.rootBox.setLayout(self.rootLayout)
 
         ### ADD HERE ###
-        self.imageSupplier = WebcamSupplier(1920, 1080) # ImageSupplier('resources/car.jpg')
+        # self.imageSupplier = WebcamSupplier(320, 240)
+        self.imageSupplier = ImageSupplier('resources/car.jpg')
+        # self.imageSupplier = ImageSupplier('resources/test.jpg') 
+        # self.imageSupplier = RainbowSupplier(0.001, 340, 240)# WebcamSupplier(320, 240) # 
         self.image = ImageDisplay(self.imageSupplier)
+        self.imageRunner = DisplayThread(self.image, 50)
 
         self.rootLayout.addWidget(self.image)
 
-        updateButton = QPushButton("Update Button")
-        updateButton.clicked.connect(self.image.update)
+        pauseButton = QPushButton("Toggle Playback")
+        pauseButton.clicked.connect(self._toggleImageStream)
 
-        self.rootLayout.addWidget(updateButton)
+        self.rootLayout.addWidget(pauseButton)
+
+        # updateButton = QPushButton("Update Button")
+        # updateButton.clicked.connect(self.image.update)
+
+        # self.rootLayout.addWidget(updateButton)
 
         self.tabName = QLineEdit()
         self.tabName.setText(name)
@@ -45,7 +54,17 @@ class Tab(QScrollArea):
         self.setWidget(self.rootBox)
         self.setWidgetResizable(True)
 
+        self.imageRunner.start()
+
         # self.setLayout(self.layout)
+
+    def close(self):
+        self.imageRunner.running = False
+        self.imageRunner.join()
+        self.imageRunner = None
+
+    def _toggleImageStream(self):
+        self.imageRunner.paused = not self.imageRunner.paused
 
     def updateName(self):
         # print(self.index)
