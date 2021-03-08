@@ -32,6 +32,13 @@ class TabManager(QWidget):
         self.tabs.setCornerWidget(self.cornerButton)
         self.cornerButton.clicked.connect(self._addNewTab)
 
+    def closeTabs(self):
+        for i in range(self.tabs.count()):
+            self._closeTab(i)
+    
+    def activeTab(self):
+        return self.tabs.currentWidget()
+
     def _addNewTab(self):
         self._addTab(self.tabs.count() - 2, f"New tab ({self.tabCount})", True)
         self.tabCount += 1
@@ -69,7 +76,3 @@ class TabManager(QWidget):
     def _closeTab(self, idx):
         tab = self.tabs.widget(idx) 
         tab.close()
-
-    def closeTabs(self):
-        for i in range(self.tabs.count()):
-            self._closeTab(i)

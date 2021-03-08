@@ -28,21 +28,18 @@ class DisplayThread(threading.Thread):
 
 class ImageDisplay(QLabel):
 
-    def __init__(self, imageSupplier):
+    def __init__(self, supplier):
         super().__init__()
 
-        self.imageSupplier = imageSupplier
+        self.supplier = supplier
         
         self.setAlignment(Qt.AlignCenter)
 
         # do one update on initialize
         self.update()
-        # self.usedPixmap = False
 
     def update(self):
-        image = self.imageSupplier.getImage()
+        image = self.supplier.getImage()
 
-        # if not self.usedPixmap:
-            # self.setPixmap(QPixmap.fromImage())
         self.setPixmap(QPixmap.fromImage(image))
 

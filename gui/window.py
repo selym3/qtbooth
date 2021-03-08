@@ -26,7 +26,7 @@ class Window(QMainWindow):
 
     def _toggleActiveTab(self):
         # TODO: add better gettets
-        self.tabManager.tabs.currentWidget()._toggleImageStream()
+        self.tabManager.activeTab().toggle()
 
     def closeEvent(self, *args, **kwargs):
         self.tabManager.closeTabs()

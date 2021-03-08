@@ -4,6 +4,8 @@ import colorsys
 
 from PyQt5.QtGui import QImage
 
+from .image_modifiers import BooleanModifier, NumberModifier
+
 from PIL import Image
 
 import cv2
@@ -21,11 +23,38 @@ class WebcamSupplier:
         # reference to singleton camera
         self.webcam = WebcamSupplier.CAMERA_INSTANCE
 
+        self.modifiers = [ 
+            BooleanModifier("Inverted", False), 
+            NumberModifier("Blur", 1, 10) 
+        ] 
+
+    # def getModifiers(self):
+    #     # if self.modifiers is None:
+    #         # self.modifiers = [ BooleanModifier("Inverted", False) ] 
+
+    #     return self.modifiers
+    
+    # def clearModifiers(self):
+        # self.modifiers = None
+
     def getImageArray(self):
         ret, frame = self.webcam.read()
 
         frame = cv2.resize(frame, (self.width, self.height), interpolation=cv2.INTER_LANCZOS4)
+ 
+        if not self.modifiers is None:
+            frame = self.applyFilters(frame)
+
         return frame
+
+    def applyFilters(self, img):
+        if self.modifiers[0].isOn():
+            img = cv2.flip(img, 1)
+        
+        blurAmount = int(self.modifiers[1].getValue())
+        img = cv2.blur(img, (blurAmount, blurAmount))
+        
+        return img
 
     def getImage(self):
         frame = self.getImageArray()

@@ -44,17 +44,22 @@ class Tab(QScrollArea):
         self.rootBox.setLayout(self.rootLayout)
 
         ### ADD HERE ###
-        self.imageSupplier = WebcamSupplier(320, 240)
+        supplier = WebcamSupplier(320, 240)
         # self.imageSupplier = ImageSupplier('resources/car.jpg')
-        # self.imageSupplier = ImageSupplier('resources/test.jpg') 
-        # self.imageSupplier = RainbowSupplier(0.001, 340, 240)# WebcamSupplier(320, 240) # 
-        self.image = ImageDisplay(self.imageSupplier)
-        self.imageRunner = DisplayThread(self.image, 50)
+        # self.imageSupplier = ImageSupplier('resources/test.jpg')
+        # self.imageSupplier = RainbowSupplier(0.001, 340, 240)# WebcamSupplier(320, 240)
+        
+        self.image = ImageDisplay(supplier)
+        self.stream = DisplayThread(self.image, 50)
 
         self.rootLayout.addWidget(self.image)
 
+        for modifier in supplier.modifiers:
+            for widget in modifier.components:
+                self.rootLayout.addWidget(widget)
+
         pauseButton = QPushButton("Toggle Playback")
-        pauseButton.clicked.connect(self._toggleImageStream)
+        pauseButton.clicked.connect(self.toggle)
 
         self.rootLayout.addWidget(pauseButton)
 
@@ -78,30 +83,33 @@ class Tab(QScrollArea):
         self.setWidget(self.rootBox)
         self.setWidgetResizable(True)
 
-        self.imageRunner.start()
+        self.stream.start()
 
         # self.setLayout(self.layout)
 
     def setStreaming(self, isStreaming):
-        self.imageRunner.paused = not isStreaming
+        self.stream.paused = not isStreaming
 
     def isStreaming(self):
-        return not self.imageRunner.paused
+        return not self.stream.paused
 
     def close(self):
-        self.imageRunner.running = False
-        self.imageRunner.join()
-        self.imageRunner = None
+        # self.image.supplier.clearModifiers()
 
-    def _toggleImageStream(self):
+        self.stream.running = False
+        self.stream.join()
+        self.stream = None
+
+    def toggle(self):
         pausedState = self.isStreaming()
   
         self.tabManager._pauseTabs()
-        self.imageRunner.paused = pausedState
+        self.stream.paused = pausedState
 
     def updateName(self):
-        # print(self.index)
-        self.tabManager.tabs.setTabText(self.index, self.tabName.text())
-        # self.imageSupplier = self.getSupplier(self.tabName.text())
-        self.image.imageSupplier = self.getSupplier(self.tabName.text())
+        text = self.tabName.text()
+
+        self.tabManager.tabs.setTabText(self.index, text)
+
+        self.image.supplier = self.getSupplier(text)
     
