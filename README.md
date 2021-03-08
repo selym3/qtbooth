@@ -10,3 +10,5 @@ A photobooth-like application built with qt and python
 * add dropdown for image suppliers
 * add sliders, buttons, etc. to image suppliers, so that they can open with sliders
 * add better getters, constants, and clean code overall
+* clean up structure of modifiers / suppliers
+* add error handling for used webcam

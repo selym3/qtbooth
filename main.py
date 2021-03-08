@@ -1,10 +1,7 @@
 import sys
 
 from PyQt5.QtWidgets import QApplication
-from PyQt5.QtWidgets import QLabel
-from PyQt5.QtWidgets import QWidget
-
-from gui.window import Window
+from gui import Window
 
 if __name__ == "__main__":
 

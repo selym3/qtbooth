@@ -1,7 +1,7 @@
 
-from PyQt5.QtWidgets import QWidget, QScrollArea, QGroupBox, QPushButton, QFormLayout, QLineEdit
-from .image_display import ImageDisplay, DisplayThread
-from .image_suppliers import ColorSupplier, RainbowSupplier, ImageSupplier, WebcamSupplier, FlippedWebcamSupplier,BlurredWebcamSupplier
+from PyQt5.QtWidgets import (QScrollArea, QGroupBox, QPushButton, QFormLayout, QLineEdit)
+from display import (ImageDisplay, DisplayThread)
+from suppliers import (ColorSupplier, RainbowSupplier, ImageSupplier, WebcamSupplier, FlippedWebcamSupplier, BlurredWebcamSupplier)
 
 class Tab(QScrollArea):
 

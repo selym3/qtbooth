@@ -1,33 +1,22 @@
-from enum import Enum
-
-from PyQt5.QtWidgets import QCheckBox, QLabel, QSlider
+from PyQt5.QtWidgets import QLabel, QSlider
 from PyQt5.QtCore import Qt
 
-class BooleanModifier:
-
-    def __init__(self, name, default=False):
-        # self.name = name
-        # self.default = default
-
-        checkBox = QCheckBox(name)
-        self.components = [ checkBox ]
-
-    def isOn(self):
-        return self.components[0].isChecked()
-
 class NumberModifier:
-
+    
     def __init__(self, name, low, high, interval=1):
+        # Setup label
         label = QLabel(name)
 
+        # Setup slider
         slider = QSlider(Qt.Horizontal)
         slider.setRange(low, high)
         slider.setValue(low)
         slider.setTickInterval(interval)
 
+        slider.valueChanged[int].connect(self.setValue)
+
         self.value = low
 
-        slider.valueChanged[int].connect(self.setValue)
 
         self.components = [ label, slider ]
 
