@@ -3,7 +3,7 @@ from PyQt5.QtCore import Qt
 
 class NumberModifier:
     
-    def __init__(self, name, low, high, interval=1):
+    def __init__(self, name, low, high, interval=1, default=None):
         # Setup label
         label = QLabel(name)
 
@@ -15,7 +15,10 @@ class NumberModifier:
 
         slider.valueChanged[int].connect(self.setValue)
 
-        self.value = low
+        if default is None:
+            default = low
+        
+        self.value = default
 
 
         self.components = [ label, slider ]

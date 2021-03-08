@@ -22,8 +22,10 @@ class WebcamSupplier:
 
         self.webcam = WebcamSupplier.updateCamera()
 
+        # TODO: replace this with a dictionary
         self.modifiers = [ 
-            BooleanModifier("Inverted", False), 
+            # BooleanModifier("Inverted", False),
+            NumberModifier("Invert Mode", -2, 1, default=-2),
             NumberModifier("Blur", 1, 10) 
         ] 
 
@@ -38,8 +40,8 @@ class WebcamSupplier:
         return frame
 
     def applyFilters(self, img):
-        if self.modifiers[0].isOn():
-            img = cv2.flip(img, 1)
+        if self.modifiers[0].getValue() != -2:
+            img = cv2.flip(img, self.modifiers[0].getValue())
         
         blurAmount = int(self.modifiers[1].getValue())
         img = cv2.blur(img, (blurAmount, blurAmount))
