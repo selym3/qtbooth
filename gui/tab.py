@@ -5,30 +5,6 @@ from suppliers import (ColorSupplier, RainbowSupplier, ImageSupplier, WebcamSupp
 
 class Tab(QScrollArea):
 
-    def getSupplier(self, name):
-        supplier = ColorSupplier((0, 0, 255), 320, 240)
-        if name == "webcam":
-            supplier = WebcamSupplier(320, 240)
-        elif name.startswith('webcam-'):
-            try:
-                direction = name[len('webcam-'):]
-                supplier = FlippedWebcamSupplier(320, 240, int(direction))
-            except Exception as e:
-                pass
-        elif name == 'blur':
-            supplier = BlurredWebcamSupplier(320, 240)
-        elif name.startswith('blur-'):
-            try:
-                amount = name[len('blur-'):]
-                amount = int(amount)
-                supplier = BlurredWebcamSupplier(320, 240,(amount, amount))
-            except Exception as e:
-                supplier = BlurredWebcamSupplier(320, 240)
-        else:
-            pass
-
-        return supplier
-
     def __init__(self, parent, name):
         super().__init__(parent)
         self.tabManager = parent
@@ -108,8 +84,28 @@ class Tab(QScrollArea):
 
     def updateName(self):
         text = self.tabName.text()
-
         self.tabManager.tabs.setTabText(self.index, text)
+        # self.image.supplier = self.getSupplier(text)
 
-        self.image.supplier = self.getSupplier(text)
-    
+    # def getSupplier(self, name):
+    #     supplier = ColorSupplier((0, 0, 255), 320, 240)
+    #     if name == "webcam":
+    #         supplier = WebcamSupplier(320, 240)
+    #     elif name.startswith('webcam-'):
+    #         try:
+    #             direction = name[len('webcam-'):]
+    #             supplier = FlippedWebcamSupplier(320, 240, int(direction))
+    #         except Exception as e:
+    #             pass
+    #     elif name == 'blur':
+    #         supplier = BlurredWebcamSupplier(320, 240)
+    #     elif name.startswith('blur-'):
+    #         try:
+    #             amount = name[len('blur-'):]
+    #             amount = int(amount)
+    #             supplier = BlurredWebcamSupplier(320, 240,(amount, amount))
+    #         except Exception as e:
+    #             supplier = BlurredWebcamSupplier(320, 240)
+    #     else:
+    #         pass
+    #     return supplier

@@ -12,3 +12,4 @@ A photobooth-like application built with qt and python
 * add better getters, constants, and clean code overall
 * clean up structure of modifiers / suppliers
 * add error handling for used webcam
+* add a way to safely switch modifiers for webcam inputs

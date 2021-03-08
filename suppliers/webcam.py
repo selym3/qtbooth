@@ -6,14 +6,21 @@ class WebcamSupplier:
     
     CAMERA_INSTANCE = None
 
-    def __init__(self, width, height):
-        self.width, self.height = width, height
-
+    def updateCamera():
         if WebcamSupplier.CAMERA_INSTANCE is None:
             WebcamSupplier.CAMERA_INSTANCE = cv2.VideoCapture(0)
 
-        # reference to singleton camera
-        self.webcam = WebcamSupplier.CAMERA_INSTANCE
+        camera = WebcamSupplier.CAMERA_INSTANCE
+
+        if camera is None or not camera.isOpened():
+            raise Exception("Default video capture could not be opened! It may already be in use.")        
+
+        return camera
+
+    def __init__(self, width, height):
+        self.width, self.height = width, height
+
+        self.webcam = WebcamSupplier.updateCamera()
 
         self.modifiers = [ 
             BooleanModifier("Inverted", False), 
