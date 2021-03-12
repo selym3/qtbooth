@@ -1,12 +1,11 @@
 import cv2
 from PyQt5.QtGui import QImage
-from modifiers import BooleanModifier, NumberModifier
 
 class WebcamSupplier:
     
     CAMERA_INSTANCE = None
 
-    def updateCamera():
+    def getCamera():
         if WebcamSupplier.CAMERA_INSTANCE is None:
             WebcamSupplier.CAMERA_INSTANCE = cv2.VideoCapture(0)
 
@@ -20,35 +19,13 @@ class WebcamSupplier:
     def __init__(self, width, height):
         self.width, self.height = width, height
 
-        self.webcam = WebcamSupplier.updateCamera()
-
-        # TODO: replace this with a dictionary
-        self.modifiers = [ 
-            # BooleanModifier("Inverted", False),
-            NumberModifier("Invert Mode", -2, 1, default=-2),
-            NumberModifier("Blur", 1, 10) 
-        ] 
+        self.webcam = WebcamSupplier.getCamera()
 
     def getImageArray(self):
         ret, frame = self.webcam.read()
-
         frame = cv2.resize(frame, (self.width, self.height), interpolation=cv2.INTER_LANCZOS4)
- 
-        if not self.modifiers is None:
-            frame = self.applyFilters(frame)
 
         return frame
 
-    def applyFilters(self, img):
-        if self.modifiers[0].getValue() != -2:
-            img = cv2.flip(img, self.modifiers[0].getValue())
-        
-        blurAmount = int(self.modifiers[1].getValue())
-        img = cv2.blur(img, (blurAmount, blurAmount))
-        
-        return img
-
     def getImage(self):
-        frame = self.getImageArray()
-
-        return QImage(frame, self.width, self.height, QImage.Format_BGR888)
+        return self.getImageArray(), QImage.Format_BGR888

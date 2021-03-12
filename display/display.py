@@ -1,20 +1,18 @@
 from PyQt5.QtWidgets import QLabel
-from PyQt5.QtGui import QPixmap
+from PyQt5.QtGui import QPixmap, QImage
 from PyQt5.QtCore import Qt
 
 class ImageDisplay(QLabel):
     
-    def __init__(self, supplier):
+    def __init__(self, supplier, filter=None):
         super().__init__()
 
         self.supplier = supplier
-        
+        self.filter = filter
+
         self.setAlignment(Qt.AlignCenter)
 
-        # do one update on initialize
-        self.update()
+    def update(self, image, format):
+        qImage = QImage(image, image.shape[1], image.shape[0], format)
 
-    def update(self):
-        image = self.supplier.getImage()
-
-        self.setPixmap(QPixmap.fromImage(image))
+        self.setPixmap(QPixmap.fromImage(qImage))

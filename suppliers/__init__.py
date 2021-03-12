@@ -1,7 +1,7 @@
 """
 Base Supplier 
 
-(not done)
+(is only an example)
 """
 from .supplier import Supplier
 
@@ -9,7 +9,6 @@ from .supplier import Supplier
 Webcam Suppliers
 """
 from .webcam import WebcamSupplier
-from .others import *
 
 """
 Color Suppliers

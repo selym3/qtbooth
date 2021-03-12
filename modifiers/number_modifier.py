@@ -10,7 +10,6 @@ class NumberModifier:
         # Setup slider
         slider = QSlider(Qt.Horizontal)
         slider.setRange(low, high)
-        slider.setValue(low)
         slider.setTickInterval(interval)
 
         slider.valueChanged[int].connect(self.setValue)
@@ -19,7 +18,7 @@ class NumberModifier:
             default = low
         
         self.value = default
-
+        slider.setValue(self.value)
 
         self.components = [ label, slider ]
 

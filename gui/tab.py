@@ -1,7 +1,9 @@
 
 from PyQt5.QtWidgets import (QScrollArea, QGroupBox, QPushButton, QFormLayout, QLineEdit)
-from display import (ImageDisplay, DisplayThread)
-from suppliers import (ColorSupplier, RainbowSupplier, ImageSupplier, WebcamSupplier, FlippedWebcamSupplier, BlurredWebcamSupplier)
+
+from display import *
+from suppliers import *
+from filters import *
 
 class Tab(QScrollArea):
 
@@ -20,17 +22,20 @@ class Tab(QScrollArea):
         self.rootBox.setLayout(self.rootLayout)
 
         ### ADD HERE ###
-        supplier = WebcamSupplier(320, 240)
-        # self.imageSupplier = ImageSupplier('resources/car.jpg')
-        # self.imageSupplier = ImageSupplier('resources/test.jpg')
-        # self.imageSupplier = RainbowSupplier(0.001, 340, 240)# WebcamSupplier(320, 240)
+        # supplier = WebcamSupplier(320, 240)
+        supplier = ImageSupplier('resources/car.jpg', (320, 240))
+        # supplier = ImageSupplier('resources/test.jpg')
+        # supplier = RainbowSupplier(0.001, 340, 240)# WebcamSupplier(320, 240)
         
-        self.image = ImageDisplay(supplier)
+        #filter = ThresholdFilter()
+        filter = TestFilter()
+        
+        self.image = ImageDisplay(supplier, filter)
         self.stream = DisplayThread(self.image, 50)
 
         self.rootLayout.addWidget(self.image)
 
-        for modifier in supplier.modifiers:
+        for modifier in filter.modifiers.values():
             for widget in modifier.components:
                 self.rootLayout.addWidget(widget)
 

@@ -25,6 +25,8 @@ class RainbowSupplier:
 
         return tuple(int(round(i * 255)) for i in rgb)
 
+    def getImageArray(self):
+        np.full((self.width, self.height, 3), self.getColor(), dtype=np.uint8)
+
     def getImage(self):
-        buffer = np.full((self.width, self.height, 3), self.getColor(), dtype=np.uint8)
-        return QImage(buffer, self.width, self.height, QImage.Format_RGB888)
+        return self.getImageArray(), QImage.Format_RGB888

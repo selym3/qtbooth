@@ -23,6 +23,8 @@ class TabManager(QWidget):
         self._addNewTab()
 
         # add the change listeners after all changes have been made
+        self.tabs.tabBar().currentChanged.connect(self._currentChanged)
+
         self.tabs.tabBar().setTabsClosable(True)
         self.tabs.tabBar().tabCloseRequested.connect(self._removeTab)
 
@@ -31,6 +33,13 @@ class TabManager(QWidget):
 
         self.tabs.setCornerWidget(self.cornerButton)
         self.cornerButton.clicked.connect(self._addNewTab)
+
+    def _currentChanged(self, i):
+        # active = self.tabs.widget(i)
+        # activePlaying = active.isStreaming()
+
+        self._pauseTabs()
+        # active.setStreaming(True)
 
     def closeTabs(self):
         for i in range(self.tabs.count()):

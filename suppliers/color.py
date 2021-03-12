@@ -8,10 +8,6 @@ class ColorSupplier:
         self.buffer = np.full((width, height, 3), color, dtype=np.uint8)
 
         self.width, self.height = width, height
-        self.image = None
 
     def getImage(self):
-        if self.image == None:
-            self.image = QImage(self.buffer, self.width, self.height, QImage.Format_RGB888)
-
-        return self.image
+        return self.buffer, QImage.Format_RGB888
