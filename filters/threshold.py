@@ -32,7 +32,7 @@ class ThresholdFilter:
         if not largest is None:
             cv2.drawContours(buffer, [ largest ], -1, 255, 3)
 
-        return buffer, format
+        return buffer, image_format.RGB_8
 
 
     def min_threshold(self):

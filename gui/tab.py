@@ -22,9 +22,9 @@ class Tab(QScrollArea):
         self.rootBox.setLayout(self.rootLayout)
 
         ### ADD HERE ###
-        # supplier = WebcamSupplier(320, 240)
+        supplier = WebcamSupplier(320, 240)
         # supplier = ColorSupplier((0, 255, 0), 320, 240)
-        supplier = ImageSupplier('resources/car.jpg', (320, 240))
+        # supplier = ImageSupplier('resources/car.jpg', (320, 240))
         # supplier = ImageSupplier('resources/test.jpg')
         # supplier = RainbowSupplier(0.001, 340, 240)
         
@@ -76,8 +76,6 @@ class Tab(QScrollArea):
         return not self.stream.paused
 
     def close(self):
-        # self.image.supplier.clearModifiers()
-
         self.stream.running = False
         self.stream.join()
         self.stream = None
@@ -91,27 +89,3 @@ class Tab(QScrollArea):
     def updateName(self):
         text = self.tabName.text()
         self.tabManager.tabs.setTabText(self.index, text)
-        # self.image.supplier = self.getSupplier(text)
-
-    # def getSupplier(self, name):
-    #     supplier = ColorSupplier((0, 0, 255), 320, 240)
-    #     if name == "webcam":
-    #         supplier = WebcamSupplier(320, 240)
-    #     elif name.startswith('webcam-'):
-    #         try:
-    #             direction = name[len('webcam-'):]
-    #             supplier = FlippedWebcamSupplier(320, 240, int(direction))
-    #         except Exception as e:
-    #             pass
-    #     elif name == 'blur':
-    #         supplier = BlurredWebcamSupplier(320, 240)
-    #     elif name.startswith('blur-'):
-    #         try:
-    #             amount = name[len('blur-'):]
-    #             amount = int(amount)
-    #             supplier = BlurredWebcamSupplier(320, 240,(amount, amount))
-    #         except Exception as e:
-    #             supplier = BlurredWebcamSupplier(320, 240)
-    #     else:
-    #         pass
-    #     return supplier
