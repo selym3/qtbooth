@@ -23,12 +23,13 @@ class Tab(QScrollArea):
 
         ### ADD HERE ###
         # supplier = WebcamSupplier(320, 240)
+        # supplier = ColorSupplier((0, 255, 0), 320, 240)
         supplier = ImageSupplier('resources/car.jpg', (320, 240))
         # supplier = ImageSupplier('resources/test.jpg')
-        # supplier = RainbowSupplier(0.001, 340, 240)# WebcamSupplier(320, 240)
+        # supplier = RainbowSupplier(0.001, 340, 240)
         
-        #filter = ThresholdFilter()
-        filter = TestFilter()
+        filter = ThresholdFilter()
+        # filter = TestFilter()
         
         self.image = ImageDisplay(supplier, filter)
         self.stream = DisplayThread(self.image, 50)

@@ -24,12 +24,13 @@ class DisplayThread(threading.Thread):
                 # If you are not paused, get another frame from the supplier
                 self.frame = self.display.supplier.getImage()
 
-            filtered = self.frame[0]
+            filtered = self.frame
 
             # Filter and display the available frame
             if not self.display.filter is None:
+                filtered = (self.frame[0].copy(), self.frame[1])
                 filtered = self.display.filter.filter(filtered)
             
-            self.display.update(filtered, self.frame[1])
+            self.display.update(filtered[0], filtered[1].toQImage())
 
             time.sleep(self.wait)

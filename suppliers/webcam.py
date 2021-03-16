@@ -1,6 +1,8 @@
 import cv2
 from PyQt5.QtGui import QImage
 
+from .image_format import BGR_8
+
 class WebcamSupplier:
     
     CAMERA_INSTANCE = None
@@ -28,4 +30,4 @@ class WebcamSupplier:
         return frame
 
     def getImage(self):
-        return self.getImageArray(), QImage.Format_BGR888
+        return self.getImageArray(), BGR_8 # QImage.Format_BGR888

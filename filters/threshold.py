@@ -2,6 +2,7 @@
 import cv2
 
 from modifiers import NumberModifier
+from suppliers import image_format
 
 class ThresholdFilter:
 
@@ -18,21 +19,20 @@ class ThresholdFilter:
 
     def filter(self, image):
 
-        # TODO: the image has to a tuple that inludes something about the image format
-        # Change this in supplier
+        buffer, format = image
 
-        hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+        hsv_image = format.convertImage(buffer, 'HSV')
         binary_image = cv2.inRange(hsv_image, self.min_threshold(), self.max_threshold())
 
         contours, _ = cv2.findContours(binary_image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         largest = self.largest_contour(contours)
 
-        out_image = image.copy() 
+        buffer = format.convertImage(buffer, 'RGB')
 
         if not largest is None:
-            cv2.drawContours(out_image, [ largest ], -1, 255, 3)
+            cv2.drawContours(buffer, [ largest ], -1, 255, 3)
 
-        return out_image
+        return buffer, format
 
 
     def min_threshold(self):

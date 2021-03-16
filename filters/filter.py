@@ -22,11 +22,8 @@ class Filter:
         Should apply a 'filter' to an image, without
         modifying it. 
         
-        A filter cannot change the format of an image,
-        nor does it know the format (these can be fixed easily,
-        see display_thread.py)
-
-        A filter can change the values in the pixels and the size.
+        A filter can change the values in the pixels, the size,
+        and the format of an image.
         """
         
         return image

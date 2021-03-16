@@ -3,10 +3,12 @@ import numpy as np
 import cv2
 from PyQt5.QtGui import QImage
 
+from .image_format import RGB_8, RGBA_8
+
 class ImageSupplier:
     
     def __init__(self, pathToImage, size=None):
-        self.image = Image.open(pathToImage).convert('RGBA')
+        self.image = Image.open(pathToImage).convert('RGB')
         self.buffer = np.array(self.image)
 
         if not size is None:
@@ -18,9 +20,10 @@ class ImageSupplier:
         imageFormat = None
         
         if self.channels == 3:
-            imageFormat = QImage.Format_RGB888
+            imageFormat = RGB_8 #  QImage.Format_RGB888
         elif self.channels == 4:
-            imageFormat = QImage.Format_RGBA8888
+            # imageFormat = RGBA_8 # QImage.Format_RGBA8888
+            pass
 
         return imageFormat
 

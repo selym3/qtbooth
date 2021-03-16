@@ -4,6 +4,8 @@ import math
 
 from PyQt5.QtGui import QImage
 
+from .image_format import RGB_8
+
 class RainbowSupplier:
     
     def __init__(self, speed, width, height):
@@ -26,7 +28,7 @@ class RainbowSupplier:
         return tuple(int(round(i * 255)) for i in rgb)
 
     def getImageArray(self):
-        np.full((self.width, self.height, 3), self.getColor(), dtype=np.uint8)
+        return np.full((self.height, self.width, 3), self.getColor(), dtype=np.uint8)
 
     def getImage(self):
-        return self.getImageArray(), QImage.Format_RGB888
+        return self.getImageArray(), RGB_8 # QImage.Format_RGB888
