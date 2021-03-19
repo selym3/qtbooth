@@ -11,4 +11,4 @@ class Supplier:
         that represents the image, and a format.
         """
 
-        return np.zeros((300, 300, 3), dtype=np.uint8), RGB_8 # QImage.Format_RGB888
+        return np.zeros((240, 320, 3), dtype=np.uint8), RGB_8 # QImage.Format_RGB888

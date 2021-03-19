@@ -1,11 +1,19 @@
 
-from PyQt5.QtWidgets import (QScrollArea, QGroupBox, QPushButton, QFormLayout, QLineEdit)
+from PyQt5.QtWidgets import (QScrollArea, QGroupBox, QPushButton, QFormLayout, QLineEdit, QComboBox)
 
 from display import *
 from suppliers import *
 from filters import *
 
 class Tab(QScrollArea):
+
+    SUPPLIERS = {
+        "None": Supplier(),
+        "Webcam": WebcamSupplier(320, 240), 
+        "A Color": ColorSupplier((0, 255, 0), 320, 240),
+        "A Rainbow": RainbowSupplier(0.01, 320, 240),
+        "Image": ImageSupplier('resources/car.jpg', (320, 240))
+    }
 
     def __init__(self, parent, name):
         super().__init__(parent)
@@ -21,34 +29,49 @@ class Tab(QScrollArea):
         self.rootLayout = QFormLayout()
         self.rootBox.setLayout(self.rootLayout)
 
+        # supplier dropdown
+
+        supplierDropdown = QComboBox(self)
+
+        for supplierName in Tab.SUPPLIERS:
+            supplierDropdown.addItem(supplierName)
+        
+        supplierDropdown.activated[str].connect(self.changeSupplier)
+
+        self.rootLayout.addWidget(supplierDropdown)
+
         ### ADD HERE ###
-        supplier = WebcamSupplier(320, 240)
+        supplier = Tab.SUPPLIERS["None"] # WebcamSupplier(320, 240)
         # supplier = ColorSupplier((0, 255, 0), 320, 240)
         # supplier = ImageSupplier('resources/car.jpg', (320, 240))
         # supplier = ImageSupplier('resources/test.jpg')
         # supplier = RainbowSupplier(0.001, 340, 240)
         
-        filter = ThresholdFilter()
-        # filter = TestFilter()
-        
+        # filter = Filter()
+        # filter = ThresholdFilter()
+        filter = TestFilter()
+
+        # actual image display
+
         self.image = ImageDisplay(supplier, filter)
         self.stream = DisplayThread(self.image, 50)
 
         self.rootLayout.addWidget(self.image)
 
+        # add the components for a filter's modifiers
+
         for modifier in filter.modifiers.values():
             for widget in modifier.components:
                 self.rootLayout.addWidget(widget)
 
-        pauseButton = QPushButton("Toggle Playback")
-        pauseButton.clicked.connect(self.toggle)
+        # add a pause button
 
-        self.rootLayout.addWidget(pauseButton)
+        self.pauseButton = QPushButton(self.getToggleText())
+        self.pauseButton.clicked.connect(self.toggle)
 
-        # updateButton = QPushButton("Update Button")
-        # updateButton.clicked.connect(self.image.update)
+        self.rootLayout.addWidget(self.pauseButton)
 
-        # self.rootLayout.addWidget(updateButton)
+        # add a tab name input
 
         self.tabName = QLineEdit()
         self.tabName.setText(name)
@@ -71,20 +94,27 @@ class Tab(QScrollArea):
 
     def setStreaming(self, isStreaming):
         self.stream.paused = not isStreaming
+        self.pauseButton.setText(self.getToggleText())
 
     def isStreaming(self):
         return not self.stream.paused
+
+    def changeSupplier(self, text):
+        self.image.supplier = Tab.SUPPLIERS[text]
 
     def close(self):
         self.stream.running = False
         self.stream.join()
         self.stream = None
 
+    def getToggleText(self):
+        return "Pause" if self.isStreaming() else "Play"
+
     def toggle(self):
         pausedState = self.isStreaming()
-  
+
         self.tabManager._pauseTabs()
-        self.stream.paused = pausedState
+        self.setStreaming(not pausedState)
 
     def updateName(self):
         text = self.tabName.text()
